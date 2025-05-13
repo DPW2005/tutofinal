@@ -1,4 +1,4 @@
-package org.example.demofinal;
+package org.example.demofinal.test;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.ParallelBehaviour;

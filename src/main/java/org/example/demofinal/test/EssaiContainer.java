@@ -1,4 +1,4 @@
-package org.example.demofinal;
+package org.example.demofinal.test;
 
 import jade.core.Profile;
 import jade.core.ProfileImpl;

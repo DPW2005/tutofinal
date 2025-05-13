@@ -1,4 +1,4 @@
-package org.example.demofinal;
+package org.example.demofinal.test;
 
 import jade.core.Runtime ;
 import jade.core.Profile ;
@@ -7,7 +7,6 @@ import jade.util.leap.Properties ;
 import jade.util.ExtendedProperties ;
 import jade.wrapper.AgentContainer ;
 import jade.wrapper.AgentController;
-import jade.wrapper.ControllerException ;
 
 public class ConsommateurContainer {
     public static void main(String[] args) throws Exception{
