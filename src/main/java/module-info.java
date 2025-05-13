@@ -4,6 +4,7 @@ module org.example.demofinal {
     requires jade;
     requires java.json;
     requires java.desktop;
+    requires com.google.gson;
 
 
     opens org.example.demofinal to javafx.fxml;
@@ -11,5 +12,6 @@ module org.example.demofinal {
     exports org.example.demofinal.medecin;
     exports org.example.demofinal.gestion_cabinet_medical_final;
     exports org.example.demofinal.test;
+    exports org.example.demofinal.receptionniste;
     opens org.example.demofinal.test to javafx.fxml;
 }

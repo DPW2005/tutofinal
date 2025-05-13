@@ -4,119 +4,121 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.example.demofinal.User;
 
 public class MedecinInterface extends Application {
 
+    Button sendButton = new Button("Envoyer");
+    TextField inputField = new TextField();
+    TableView<User> table = new TableView<>();
+    ObservableList<User> users = FXCollections.observableArrayList(
+            new User(1, "Lea", 20, "F"),
+            new User(1, "Line", 21, "F"),
+            new User(1, "Nassair", 22, "M"));
+
     @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Medecin");
+    public void start(Stage stage) {
+        stage.setTitle("MEDECIN");
 
-        // Top Section: Consultation List
-        Label consultationLabel = new Label("Liste Consultations");
+        VBox root = new VBox(10);
+        root.setPadding(new Insets(10));
 
-        // TableView
-        TableView<Consultation> consultationTable = new TableView<>();
-        ObservableList<Consultation> consultations = FXCollections.observableArrayList();
-        consultationTable.setItems(consultations);
+        // Titre
+        Label title = new Label("BUREAU DU MEDECIN");
+        title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        root.getChildren().add(title);
 
-        // Columns
-        TableColumn<Consultation, Integer> numeroCol = new TableColumn<>("Numero");
-        numeroCol.setCellValueFactory(new PropertyValueFactory<>("numero"));
+        TableColumn<User, Integer> colNumero = new TableColumn<>("Numero");
+        colNumero.setCellValueFactory(new PropertyValueFactory<>("numero"));
+        colNumero.setPrefWidth(70);
 
-        TableColumn<Consultation, String> nomCol = new TableColumn<>("Nom");
-        nomCol.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        TableColumn<User, String> colNom = new TableColumn<>("Nom");
+        colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        colNom.setPrefWidth(100);
 
-        TableColumn<Consultation, Integer> ageCol = new TableColumn<>("Age");
-        ageCol.setCellValueFactory(new PropertyValueFactory<>("age"));
+        TableColumn<User, Integer> colAge = new TableColumn<>("Age");
+        colAge.setCellValueFactory(new PropertyValueFactory<>("age"));
+        colAge.setPrefWidth(60);
 
-        TableColumn<Consultation, String> sexeCol = new TableColumn<>("Sexe");
-        sexeCol.setCellValueFactory(new PropertyValueFactory<>("sexe"));
+        TableColumn<User, String> colSexe = new TableColumn<>("Sexe");
+        colSexe.setCellValueFactory(new PropertyValueFactory<>("sexe"));
+        colSexe.setPrefWidth(60);
 
+        TableColumn<User, Void> colAction = new TableColumn<>("Action");
+        colAction.setPrefWidth(100);
+        colAction.setCellFactory(param -> new TableCell<>() {
+            final Button btnC = new Button("C");
+            final Button btnR = new Button("R");
+            final HBox pane = new HBox(5, btnC, btnR);
 
-        consultationTable.getColumns().addAll(numeroCol, nomCol, ageCol, sexeCol);
+            {
+                btnC.setOnAction(event -> {
+                    User user = getTableView().getItems().get(getIndex());
+                    System.out.println("Consulter: " + user.getNom());
+                });
+                btnR.setOnAction(event -> {
+                    User user = getTableView().getItems().get(getIndex());
+                    System.out.println("Rédiger: " + user.getNom());
+                });
+            }
 
-        VBox consultationLayout = new VBox(3, consultationLabel, consultationTable);
-        consultationLayout.setPadding(new Insets(10));
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(pane);
+                }
+            }
+        });
 
-        // Center Section: Tabs and Input
+        table.getColumns().addAll(colNumero, colNom, colAge, colSexe, colAction);
+        table.setPrefHeight(120);
+
+        // Ajout des données
+        table.setItems(users);
+
+        // Tabs
         TabPane tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        tabPane.getTabs().addAll(
+                new Tab("DISCUSSION"),
+                new Tab("DIAGNOSTIC-PRESCRIPTION"),
+                new Tab("INFOS-PATIENTS"),
+                new Tab("INFOS-CONSULTATIONS")
+        );
+        tabPane.setPrefHeight(30);
 
-        Tab discussionTab = new Tab("Discussion");
-        discussionTab.setContent(new StackPane(new Label("Discussion Content")));
+        // Zone de texte pour discussion
+        TextArea discussionArea = new TextArea();
+        discussionArea.setPrefHeight(100);
 
-        Tab diagnosticPrescriptionTab = new Tab("DIAGNOSTIC-PRESCRIPTION");
-        diagnosticPrescriptionTab.setContent(new StackPane(new Label("Diagnostic/Prescription Content")));
+        // Champ de saisie + bouton envoyer
+        inputField.setPrefWidth(400);
 
-        Tab infosPatientsTab = new Tab("INFOS-PATIENTS");
-        infosPatientsTab.setContent(new StackPane(new Label("Patient Information Content")));
+        HBox inputBox = new HBox(5, inputField, sendButton);
+        inputBox.setPadding(new Insets(5, 0, 0, 0));
 
-        Tab infosConsultationsTab = new Tab("INFOS-CONSULTATIONS");
-        infosConsultationsTab.setContent(new StackPane(new Label("Consultation Information Content")));
+        VBox discussionBox = new VBox(tabPane, discussionArea, inputBox);
 
-        tabPane.getTabs().addAll(discussionTab, diagnosticPrescriptionTab, infosPatientsTab, infosConsultationsTab);
+        // Boutons Terminé / Rendez-vous
+        HBox buttonBox = new HBox(10);
+        Button btnTermine = new Button("Terminé");
+        Button btnRdv = new Button("Rendez-Vous");
+        buttonBox.getChildren().addAll(btnTermine, btnRdv);
+        buttonBox.setPadding(new Insets(10, 0, 0, 0));
 
-        TextArea zoneSaisie = new TextArea() ;
-        TextField inputTextField = new TextField();
-        Button envoyerButton = new Button("Envoyer");
-        HBox inputLayout = new HBox(10, zoneSaisie, inputTextField, envoyerButton);
-        inputLayout.setMaxHeight(200);
-        inputLayout.setAlignment(Pos.CENTER_RIGHT);
-        inputLayout.setPadding(new Insets(10));
+        root.getChildren().addAll(new Label("LISTE DES CONSULTATIONS"), table, discussionBox, buttonBox);
 
-        VBox centerLayout = new VBox(10, tabPane, inputLayout);
-
-        // Bottom Section: Buttons
-        Button termineButton = new Button("Terminé");
-        Button rendezVousButton = new Button("Rendez-Vous");
-        HBox bottomLayout = new HBox(10, termineButton, rendezVousButton);
-        bottomLayout.setAlignment(Pos.CENTER_RIGHT);
-        bottomLayout.setPadding(new Insets(10));
-
-        // Main Layout
-        BorderPane mainPane = new BorderPane();
-        mainPane.setTop(consultationLayout);
-        mainPane.setCenter(centerLayout);
-        mainPane.setBottom(bottomLayout);
-
-        Scene scene = new Scene(mainPane, 600, 400);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    public static class Consultation {
-        private final int numero;
-        private final String nom;
-        private final int age;
-        private final String sexe;
-
-        public Consultation(int numero, String nom, int age, String sexe) {
-            this.numero = numero;
-            this.nom = nom;
-            this.age = age;
-            this.sexe = sexe;
-        }
-
-        public int getNumero() {
-            return numero;
-        }
-
-        public String getNom() {
-            return nom;
-        }
-
-        public int getAge() {
-            return age;
-        }
-
-        public String getSexe() {
-            return sexe;
-        }
+        Scene scene = new Scene(root, 525, 400);
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static void main(String[] args) {
