@@ -12,6 +12,8 @@ public class MedecinAgent extends GuiAgent {
     public static boolean fichierModifierMedecin = false;
     private MedecinContainer medecinContainer ;
     protected MedecinFichier medecinFichier = new MedecinFichier() ;
+    protected String fichierEcriture = "org/example/demofinal/fichier/sendByPatient.txt";
+    protected String fichierLecture = "org/example/demofinal/fichier/sendByExpertDoctor.txt";
 
     @Override
     protected void setup(){
@@ -74,5 +76,9 @@ public class MedecinAgent extends GuiAgent {
     @Override
     protected void onGuiEvent(GuiEvent guiEvent) {
         throw new UnsupportedOperationException("NOT SUPPORT YET") ;
+    }
+
+    public void writeMessage(String fileName,String contenu){
+
     }
 }

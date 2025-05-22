@@ -15,6 +15,7 @@ public class MedecinInterface extends Application {
 
     Button sendButton = new Button("Envoyer");
     TextField inputField = new TextField();
+
     TableView<User> table = new TableView<>();
     ObservableList<User> users = FXCollections.observableArrayList(
             new User(1, "Lea", 20, "F"),
@@ -39,7 +40,7 @@ public class MedecinInterface extends Application {
 
         TableColumn<User, String> colNom = new TableColumn<>("Nom");
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
-        colNom.setPrefWidth(100);
+        colNom.setPrefWidth(170);
 
         TableColumn<User, Integer> colAge = new TableColumn<>("Age");
         colAge.setCellValueFactory(new PropertyValueFactory<>("age"));
@@ -49,74 +50,24 @@ public class MedecinInterface extends Application {
         colSexe.setCellValueFactory(new PropertyValueFactory<>("sexe"));
         colSexe.setPrefWidth(60);
 
-        TableColumn<User, Void> colAction = new TableColumn<>("Action");
-        colAction.setPrefWidth(100);
-        colAction.setCellFactory(param -> new TableCell<>() {
-            final Button btnC = new Button("C");
-            final Button btnR = new Button("R");
-            final HBox pane = new HBox(5, btnC, btnR);
 
-            {
-                btnC.setOnAction(event -> {
-                    User user = getTableView().getItems().get(getIndex());
-                    System.out.println("Consulter: " + user.getNom());
-                });
-                btnR.setOnAction(event -> {
-                    User user = getTableView().getItems().get(getIndex());
-                    System.out.println("Rédiger: " + user.getNom());
-                });
-            }
 
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(pane);
-                }
-            }
-        });
-
-        table.getColumns().addAll(colNumero, colNom, colAge, colSexe, colAction);
-        table.setPrefHeight(120);
+        table.getColumns().addAll(colNumero, colNom, colAge, colSexe);
+        table.setPrefHeight(300);
 
         // Ajout des données
         table.setItems(users);
 
-        // Tabs
-        TabPane tabPane = new TabPane();
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        tabPane.getTabs().addAll(
-                new Tab("DISCUSSION"),
-                new Tab("DIAGNOSTIC-PRESCRIPTION"),
-                new Tab("INFOS-PATIENTS"),
-                new Tab("INFOS-CONSULTATIONS")
-        );
-        tabPane.setPrefHeight(30);
 
-        // Zone de texte pour discussion
-        TextArea discussionArea = new TextArea();
-        discussionArea.setPrefHeight(100);
-
-        // Champ de saisie + bouton envoyer
-        inputField.setPrefWidth(400);
-
-        HBox inputBox = new HBox(5, inputField, sendButton);
-        inputBox.setPadding(new Insets(5, 0, 0, 0));
-
-        VBox discussionBox = new VBox(tabPane, discussionArea, inputBox);
 
         // Boutons Terminé / Rendez-vous
         HBox buttonBox = new HBox(10);
-        Button btnTermine = new Button("Terminé");
-        Button btnRdv = new Button("Rendez-Vous");
-        buttonBox.getChildren().addAll(btnTermine, btnRdv);
+        buttonBox.getChildren().addAll();
         buttonBox.setPadding(new Insets(10, 0, 0, 0));
 
-        root.getChildren().addAll(new Label("LISTE DES CONSULTATIONS"), table, discussionBox, buttonBox);
+        root.getChildren().addAll(new Label("LISTE DES CONSULTATIONS"), table, buttonBox);
 
-        Scene scene = new Scene(root, 525, 400);
+        Scene scene = new Scene(root, 400, 400);
         stage.setScene(scene);
         stage.show();
     }

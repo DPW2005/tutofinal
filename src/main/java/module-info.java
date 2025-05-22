@@ -13,5 +13,6 @@ module org.example.demofinal {
     exports org.example.demofinal.gestion_cabinet_medical_final;
     exports org.example.demofinal.test;
     exports org.example.demofinal.receptionniste;
+    exports org.example.demofinal.patient;
     opens org.example.demofinal.test to javafx.fxml;
 }

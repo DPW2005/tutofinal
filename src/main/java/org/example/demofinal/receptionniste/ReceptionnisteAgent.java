@@ -41,6 +41,7 @@ public class ReceptionnisteAgent extends GuiAgent {
                                     e.printStackTrace();
                                 }
                             }
+                            break;
                         default: break;
                     }
                 }

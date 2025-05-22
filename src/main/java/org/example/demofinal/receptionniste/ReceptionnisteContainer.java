@@ -15,7 +15,6 @@ import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import org.example.demofinal.User;
 import org.example.demofinal.gestion_cabinet_medical_final.GESTION_CABINET_MEDICAL_FINAL;
-import org.example.demofinal.medecin.MedecinAgent;
 
 public class ReceptionnisteContainer extends Application {
 
