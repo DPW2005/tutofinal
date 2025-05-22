@@ -17,10 +17,7 @@ public class MedecinInterface extends Application {
     TextField inputField = new TextField();
 
     TableView<User> table = new TableView<>();
-    ObservableList<User> users = FXCollections.observableArrayList(
-            new User(1, "Lea", 20, "F"),
-            new User(1, "Line", 21, "F"),
-            new User(1, "Nassair", 22, "M"));
+    ObservableList<User> users = FXCollections.observableArrayList() ;
 
     @Override
     public void start(Stage stage) {

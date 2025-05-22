@@ -1,23 +1,40 @@
 package org.example.demofinal;
 
 public  class User {
-    private Integer numero;
-    private String nom;
-    private Integer age;
-    private String sexe;
-    private String status ;
+    public int numero;
+    public String nom;
+    public int age;
+    public String sexe;
 
-    public User(Integer numero, String nom, Integer age, String sexe) {
-        this.numero = numero;
-        this.nom = nom;
-        this.age = age;
-        this.sexe = sexe;
+    public int getNumero() {
+        return numero;
     }
 
-    public Integer getNumero() { return numero; }
-    public String getNom() { return nom; }
-    public Integer getAge() { return age; }
-    public String getSexe() { return sexe; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
+    }
 }

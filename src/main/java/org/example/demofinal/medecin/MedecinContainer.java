@@ -55,7 +55,7 @@ public class MedecinContainer extends Application {
             public void handle(ActionEvent event) {
                 User userSelected = medecinInterface.table.getSelectionModel().getSelectedItem() ;
                 String message = medecinInterface.inputField.getText() ;
-                System.out.println("Je suis le medecin, j'ai saisi : {"+message+"} pour le patient : "+ userSelected.getNom());
+                System.out.println("Je suis le medecin, j'ai saisi : {"+message+"} pour le patient : "+ userSelected.nom);
                 ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
                 aclMessage.setContent(message);
                 aclMessage.addReceiver(new AID("PatientAgent",AID.ISLOCALNAME));

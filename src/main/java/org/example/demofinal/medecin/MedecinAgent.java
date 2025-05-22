@@ -11,7 +11,6 @@ public class MedecinAgent extends GuiAgent {
 
     public static boolean fichierModifierMedecin = false;
     private MedecinContainer medecinContainer ;
-    protected MedecinFichier medecinFichier = new MedecinFichier() ;
     protected String fichierEcriture = "org/example/demofinal/fichier/sendByPatient.txt";
     protected String fichierLecture = "org/example/demofinal/fichier/sendByExpertDoctor.txt";
 
@@ -31,10 +30,7 @@ public class MedecinAgent extends GuiAgent {
                     guiEvent.addParameter(aclMessage.getContent());
                     medecinContainer.viewMessage(guiEvent) ;
                     String formatMessage = medecinContainer.formatMessage(aclMessage.getContent()) ;
-                    medecinFichier.write(medecinContainer.fichierEcriture,formatMessage) ;
-                    String reponseExperta = medecinFichier.read(medecinContainer.fichierLecture) ;
                     ACLMessage message = new ACLMessage(ACLMessage.INFORM) ;
-                    message.setContent(reponseExperta);
                     message.addReceiver(new AID("PatientAgent",AID.ISLOCALNAME));
                     send(message);
                     GuiEvent guiEvent1 = new GuiEvent(this,1) ;
