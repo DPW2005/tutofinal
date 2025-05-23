@@ -52,7 +52,7 @@ public class MedecinAgent extends GuiAgent {
                         for(int i = 1 ; i < elements.length ; i++){
                             symptomes.add(elements[i]) ;
                         }
-                        String diagnostic = "Prendre du paracetamol" ;
+                        String diagnostic = ExpertSystem.diagnostiquer(symptomes) ;
                         medecinContainer.writeDiagnostic(elements[0],diagnostic);
                     }
                 }
