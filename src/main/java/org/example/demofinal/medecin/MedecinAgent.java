@@ -7,6 +7,9 @@ import jade.lang.acl.ACLMessage;
 import jade.wrapper.ControllerException;
 import org.example.demofinal.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MedecinAgent extends GuiAgent {
 
     private MedecinContainer medecinContainer ;
@@ -41,6 +44,16 @@ public class MedecinAgent extends GuiAgent {
                         String info = message.substring(11) ;
                         String[] elements = info.split(",") ;
                         medecinContainer.writeInDiscussion(elements[0],elements[1]);
+                    }
+                    if(message.startsWith("SYMPTOME:")){
+                        String info = message.substring(9) ;
+                        String[] elements = info.split(",") ;
+                        List<String> symptomes = new ArrayList<>() ;
+                        for(int i = 1 ; i < elements.length ; i++){
+                            symptomes.add(elements[i]) ;
+                        }
+                        String diagnostic = "Prendre du paracetamol" ;
+                        medecinContainer.writeDiagnostic(elements[0],diagnostic);
                     }
                 }
                 else{

@@ -5,6 +5,7 @@ import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.ControllerException;
+import javafx.stage.Stage;
 
 public class PatientAgent extends GuiAgent {
 
@@ -21,23 +22,20 @@ public class PatientAgent extends GuiAgent {
                 ACLMessage aclMessage = receive() ;
                 if(aclMessage != null){
                     String sender = aclMessage.getSender().getName() ;
+                    String message = aclMessage.getContent() ;
                     System.out.println("On a recu le message de quelqu'un : "+sender);
-                    switch (sender){
-                        case("ReceptionnisteAgent@192.168.56.1:1099/JADE") :
-                            if(aclMessage.getPerformative() == 4){
-                                GuiEvent guiEvent = new GuiEvent(this,2) ;
-                                guiEvent.addParameter(aclMessage.getContent());
-                                patientContainer.viewMessage(guiEvent) ;
-                            }
-                            break;
-                        case("MedecinAgent@192.168.56.1:1099/JADE") :
-                            if(aclMessage.getPerformative() == 7){
-                                GuiEvent guiEvent = new GuiEvent(this,1) ;
-                                guiEvent.addParameter(aclMessage.getContent());
-                                patientContainer.viewMessage(guiEvent) ;
-                            }
-                            break;
-                        default: break;
+                    if(message.startsWith("DISCUSSION:")){
+                        String info = message.substring(11) ;
+                        String[] elements = info.split(",") ;
+                        patientContainer.writeInDiscussion(elements[0],elements[1]);
+                    }
+                    if(message.startsWith("CONFIRMATION:")){
+                        System.out.println(message.substring(13));
+                    }
+                    if(message.startsWith("DIAGNOSTIC:")){
+                        String info = message.substring(11) ;
+                        String[] elements = info.split(",") ;
+                        patientContainer.writeDiagnostic(elements[0],elements[1]);
                     }
                 }
             }

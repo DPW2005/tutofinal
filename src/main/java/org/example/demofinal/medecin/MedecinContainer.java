@@ -257,10 +257,22 @@ public class MedecinContainer extends Application {
             if(sender.equals(consultationInterface.patientName)){
                 Label newMessage = new Label(sender+" : "+message) ;
                 consultationInterface.textArea.getChildren().add(newMessage) ;
-                writeMessage(sender, message);
+                //writeMessage(sender, message);
             }
             else{
-                writeMessage(sender, message);
+                //writeMessage(sender, message);
+            }
+        });
+    }
+
+    public void writeDiagnostic(String sender,String message){
+        Platform.runLater(() -> {
+            if(sender.equals(consultationInterface.patientName)){
+                consultationInterface.diagnosticArea.appendText(message);
+                //writeMessage(sender, message);
+            }
+            else{
+                //writeMessage(sender, message);
             }
         });
     }

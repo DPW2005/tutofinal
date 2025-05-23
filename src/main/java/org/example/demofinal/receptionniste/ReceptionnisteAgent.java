@@ -52,7 +52,7 @@ public class ReceptionnisteAgent extends GuiAgent {
                         receptionnisteContainer.writeConsultationFile();
                         System.out.println("Consultation ajoute");
                         ACLMessage reponsePatient = new ACLMessage() ;
-                        reponsePatient.setContent("La demande de consultation du patient : "+consultation.patientName+" a ete acceptee") ;
+                        reponsePatient.setContent("CONFIRMATION: La demande de consultation du patient : "+consultation.patientName+" a ete acceptee") ;
                         reponsePatient.addReceiver(new AID("PatientAgent",AID.ISLOCALNAME));
                         send(reponsePatient);
                         System.out.println("Validation de consultation de "+consultation.patientName);

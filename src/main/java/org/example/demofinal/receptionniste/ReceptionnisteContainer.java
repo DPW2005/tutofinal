@@ -131,7 +131,6 @@ public class ReceptionnisteContainer extends Application {
             FileWriter fw = new FileWriter(consultationFile) ;
             BufferedWriter bw = new BufferedWriter(fw) ;
             String message = receptionnisteInterface.consultations.stream().map(Consultation::toString).collect(Collectors.joining(";")); ;
-            bw.newLine();
             bw.write(message);
             bw.close();
             fw.close();

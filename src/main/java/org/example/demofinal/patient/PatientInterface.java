@@ -15,7 +15,6 @@ public class PatientInterface extends Application {
     TextField ageField = new TextField();
     TextField adresseField = new TextField();
     TextField telField = new TextField();
-    Button btnEnregistrer = new Button("Enregistrer");
     Button btnConsulter = new Button("Consulter");
     ToggleGroup sexeGroup = new ToggleGroup();
     RadioButton rbF = new RadioButton("F");
@@ -23,7 +22,7 @@ public class PatientInterface extends Application {
 
     @Override
     public void start(Stage stage) {
-        stage.setTitle("Patient");
+        stage.setTitle("PATIENT");
 
         // Titre
         Label titleLabel = new Label("Mes Informations");
@@ -38,6 +37,7 @@ public class PatientInterface extends Application {
 
         // Sexe (radio buttons)
         rbF.setToggleGroup(sexeGroup);
+        rbM.setToggleGroup(sexeGroup);
         HBox sexeBox = new HBox(10, rbF, rbM);
         sexeBox.setAlignment(Pos.CENTER_LEFT);
 
@@ -46,8 +46,6 @@ public class PatientInterface extends Application {
         telField.setPromptText("+237");
 
         // Boutons
-        btnEnregistrer.setStyle("-fx-background-color: green; -fx-text-fill: white;");
-
         btnConsulter.setStyle("-fx-background-color: green; -fx-text-fill: white;");
 
         // Grille de formulaire
@@ -75,7 +73,7 @@ public class PatientInterface extends Application {
         formGrid.add(telField, 1, 5);
 
         // Boutons en bas
-        VBox buttonBox = new VBox(10, btnEnregistrer, btnConsulter);
+        VBox buttonBox = new VBox(10, btnConsulter);
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setPadding(new Insets(10, 0, 0, 0));
 
