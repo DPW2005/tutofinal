@@ -7,6 +7,11 @@ public class Consultation {
     public String date ;
     public String status ;
 
+    @Override
+    public String toString() {
+        return this.numero+","+this.patientName+","+this.lieu+","+this.date+","+this.status ;
+    }
+
     public int getNumero() {
         return numero;
     }

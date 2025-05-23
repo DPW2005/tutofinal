@@ -15,7 +15,7 @@ import org.example.demofinal.User;
 public class ReceptionnisteInterface extends Application {
 
 
-    Button btnAccepter = new Button("Accepté");
+    Button btnAccepter = new Button("Demande de consultation");
     TableView<User> demandeTable = new TableView<>();
     TableView<Consultation> consultationTable = new TableView<>();
     ObservableList<User> users = FXCollections.observableArrayList() ;
@@ -24,9 +24,6 @@ public class ReceptionnisteInterface extends Application {
     @Override
     public void start(Stage stage) {
 
-        /*for (int i = 1; i <= 20; i++) {
-            users1.add(new User(i, (i % 3 == 0) ? "Nassair" : (i % 2 == 0 ? "Line" : "Lea"), 20 + (i % 3), (i % 2 == 0) ? "F" : "M"));
-        }*/
         stage.setTitle("RECEPTIONNISTE");
 
         VBox root = new VBox(10);

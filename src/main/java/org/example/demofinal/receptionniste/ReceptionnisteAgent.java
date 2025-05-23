@@ -31,25 +31,25 @@ public class ReceptionnisteAgent extends GuiAgent {
                         String[] elements = info.split(",") ;
                         for(String e : elements){System.out.println(e);}
                         User user = new User() ;
-                        user.numero = receptionnisteContainer.nbreLignePatient + 1 ;
+                        user.numero = receptionnisteContainer.receptionnisteInterface.users.size() + 1 ;
                         user.nom = elements[0] ;
                         user.age = Integer.parseInt(elements[1]) ;
                         user.sexe = elements[2] ;
                         receptionnisteContainer.receptionnisteInterface.users.add(user) ;
-                        receptionnisteContainer.writePatientFile(user);
+                        receptionnisteContainer.writePatientFile();
                         System.out.println("Utilisateur ajoute");
                     }
                     if(message.startsWith("ACCEPTE:")){
                         String info = message.substring(8) ;
                         String[] elements = info.split(",") ;
                         Consultation consultation = new Consultation() ;
-                        consultation.numero = receptionnisteContainer.nbreLigneConsultation + 1 ;
+                        consultation.numero = receptionnisteContainer.receptionnisteInterface.consultations.size() + 1 ;
                         consultation.patientName = elements[0] ;
                         consultation.lieu = elements[1] ;
                         consultation.date = elements[2] ;
                         consultation.status = elements[3] ;
                         receptionnisteContainer.receptionnisteInterface.consultations.add(consultation) ;
-                        receptionnisteContainer.writeConsultationFile(consultation);
+                        receptionnisteContainer.writeConsultationFile();
                         System.out.println("Consultation ajoute");
                         ACLMessage reponsePatient = new ACLMessage() ;
                         reponsePatient.setContent("La demande de consultation du patient : "+consultation.patientName+" a ete acceptee") ;

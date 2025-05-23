@@ -6,6 +6,11 @@ public  class User {
     public int age;
     public String sexe;
 
+    @Override
+    public String toString() {
+        return this.numero+","+this.nom+","+this.age+","+this.sexe ;
+    }
+
     public int getNumero() {
         return numero;
     }

@@ -1,18 +1,15 @@
 package org.example.demofinal.medecin;
 
-import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.ControllerException;
+import org.example.demofinal.User;
 
 public class MedecinAgent extends GuiAgent {
 
-    public static boolean fichierModifierMedecin = false;
     private MedecinContainer medecinContainer ;
-    protected String fichierEcriture = "org/example/demofinal/fichier/sendByPatient.txt";
-    protected String fichierLecture = "org/example/demofinal/fichier/sendByExpertDoctor.txt";
 
     @Override
     protected void setup(){
@@ -24,19 +21,27 @@ public class MedecinAgent extends GuiAgent {
             public void action() {
                 ACLMessage aclMessage = receive() ;
                 if(aclMessage != null){
-                    int i = 0 ;
-                    System.out.println("Reception du message : "+aclMessage.getContent());
-                    GuiEvent guiEvent = new GuiEvent(this,1) ;
-                    guiEvent.addParameter(aclMessage.getContent());
-                    medecinContainer.viewMessage(guiEvent) ;
-                    String formatMessage = medecinContainer.formatMessage(aclMessage.getContent()) ;
-                    ACLMessage message = new ACLMessage(ACLMessage.INFORM) ;
-                    message.addReceiver(new AID("PatientAgent",AID.ISLOCALNAME));
-                    send(message);
-                    GuiEvent guiEvent1 = new GuiEvent(this,1) ;
-                    guiEvent1.addParameter(message.getContent());
-                    medecinContainer.viewMessage(guiEvent1);
-                    fichierModifierMedecin = false ;
+                    String sender = aclMessage.getSender().getName() ;
+                    String message = aclMessage.getContent() ;
+                    System.out.println("On a recu un message de quelqu'un : "+sender);
+                    if(message.startsWith("DEMANDE:")){
+                        String info = message.substring(8) ;
+                        String[] elements = info.split(",") ;
+                        for(String e : elements){System.out.println(e);}
+                        User user = new User() ;
+                        user.numero = medecinContainer.medecinInterface.users.size() + 1 ;
+                        user.nom = elements[0] ;
+                        user.age = Integer.parseInt(elements[1]) ;
+                        user.sexe = elements[2] ;
+                        medecinContainer.medecinInterface.users.add(user) ;
+                        medecinContainer.writeDemandeFile();
+                        System.out.println("Utilisateur ajoute");
+                    }
+                    if(message.startsWith("DISCUSSION:")){
+                        String info = message.substring(11) ;
+                        String[] elements = info.split(",") ;
+                        medecinContainer.writeInDiscussion(elements[0],elements[1]);
+                    }
                 }
                 else{
                     block();

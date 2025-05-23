@@ -18,13 +18,12 @@ import org.example.demofinal.User;
 import org.example.demofinal.gestion_cabinet_medical_final.GESTION_CABINET_MEDICAL_FINAL;
 
 import java.io.*;
+import java.util.stream.Collectors;
 
 public class ReceptionnisteContainer extends Application {
 
     private String consultationFile = "C:\\Users\\USER\\Documents\\Github\\DemoFinal\\src\\main\\java\\org\\example\\demofinal\\fichier\\consultation.txt" ;
     private String patientFile = "C:\\Users\\USER\\Documents\\Github\\DemoFinal\\src\\main\\java\\org\\example\\demofinal\\fichier\\patient.txt" ;
-    public int nbreLignePatient ;
-    public int nbreLigneConsultation ;
     private ReceptionnisteAgent receptionnisteAgent ;
     protected ReceptionnisteInterface receptionnisteInterface = new ReceptionnisteInterface() ;
     GESTION_CABINET_MEDICAL_FINAL gestionCabinetMedicalFinal = new GESTION_CABINET_MEDICAL_FINAL() ;
@@ -40,19 +39,20 @@ public class ReceptionnisteContainer extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         startContainer();
-        nbreLignePatient = readPatientFile();
-        nbreLigneConsultation = readConsultationFile();
+        readPatientFile();
+        readConsultationFile();
         receptionnisteInterface.start(stage);
         receptionnisteInterface.btnAccepter.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 User userSelected = receptionnisteInterface.demandeTable.getSelectionModel().getSelectedItem() ;
                 receptionnisteInterface.demandeTable.getItems().remove(userSelected) ;
+                writePatientFile();
                 System.out.println("La demande de consultation de : "+userSelected.nom+" est en traitement");
                 ACLMessage aclMessage = new ACLMessage() ;
-                aclMessage.setContent("DEMANDE:"+userSelected.numero+","+userSelected.nom+","+userSelected.age+","+userSelected.sexe);
+                aclMessage.setContent("DEMANDE:"+userSelected.nom+","+userSelected.age+","+userSelected.sexe);
                 aclMessage.addReceiver(new AID("MedecinAgent",AID.ISLOCALNAME));
-                //receptionnisteAgent.send(aclMessage);
+                receptionnisteAgent.send(aclMessage);
             }
         });
     }
@@ -61,20 +61,19 @@ public class ReceptionnisteContainer extends Application {
         Runtime runtime = Runtime.instance() ;
         Properties properties = new ExtendedProperties() ;
         properties.setProperty(Profile.GUI, "false") ;
-        properties.setProperty(Profile.CONTAINER_NAME, "ReceptionContainer") ;
+        properties.setProperty(Profile.CONTAINER_NAME, "ReceptionnisteContainer") ;
         Profile profile = new ProfileImpl(properties) ;
         AgentContainer receptionnisteContainer = runtime.createAgentContainer(profile) ;
         AgentController receptionnisteController = receptionnisteContainer.createNewAgent("ReceptionnisteAgent", ReceptionnisteAgent.class.getName(), new Object[]{this}) ;
         receptionnisteController.start() ;
     }
 
-    public int readPatientFile(){
+    public void readPatientFile(){
         try{
             FileReader fr = new FileReader(patientFile) ;
             BufferedReader br = new BufferedReader(fr) ;
-            String ligne ;
-            int nbreLigne = 0 ;
-            while((ligne = br.readLine()) != null){
+            String[] lignes = br.readLine().split(";") ;
+            for(String ligne : lignes){
                 String[] elements = ligne.split(",") ;
                 User user = new User() ;
                 user.numero = Integer.parseInt(elements[0]) ;
@@ -82,23 +81,21 @@ public class ReceptionnisteContainer extends Application {
                 user.age = Integer.parseInt(elements[2]) ;
                 user.sexe = elements[3] ;
                 receptionnisteInterface.users.add(user) ;
-                nbreLigne++ ;
             }
-            return nbreLigne ;
+            br.close();
+            fr.close();
         }
         catch(Exception e){
             e.printStackTrace();
-            return 0 ;
         }
     }
 
-    public int readConsultationFile(){
+    public void readConsultationFile(){
         try{
             FileReader fr = new FileReader(consultationFile) ;
             BufferedReader br = new BufferedReader(fr) ;
-            String ligne ;
-            int nbreLigne = 0 ;
-            while((ligne = br.readLine()) != null){
+            String[] lignes = br.readLine().split(";") ;
+            for(String ligne : lignes){
                 String[] elements = ligne.split(",") ;
                 Consultation consultation = new Consultation() ;
                 consultation.numero = Integer.parseInt(elements[0]) ;
@@ -107,35 +104,37 @@ public class ReceptionnisteContainer extends Application {
                 consultation.date = elements[3] ;
                 consultation.status = elements[4] ;
                 receptionnisteInterface.consultations.add(consultation) ;
-                nbreLigne++ ;
             }
-            return nbreLigne ;
+            br.close();
+            fr.close();
         }
         catch(Exception e){
             e.printStackTrace();
-            return 0 ;
         }
     }
 
-    public void writePatientFile(User user){
+    public void writePatientFile(){
         try {
             FileWriter fw = new FileWriter(patientFile) ;
             BufferedWriter bw = new BufferedWriter(fw) ;
-            String message = user.numero+","+user.nom+","+user.age+","+user.sexe ;
-            bw.newLine();
+            String message = receptionnisteInterface.users.stream().map(User::toString).collect(Collectors.joining(";"));
             bw.write(message);
+            bw.close();
+            fw.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void writeConsultationFile(Consultation consultation){
+    public void writeConsultationFile(){
         try {
             FileWriter fw = new FileWriter(consultationFile) ;
             BufferedWriter bw = new BufferedWriter(fw) ;
-            String message = consultation.numero+","+consultation.patientName+","+consultation.lieu+","+consultation.date+","+consultation.status ;
+            String message = receptionnisteInterface.consultations.stream().map(Consultation::toString).collect(Collectors.joining(";")); ;
             bw.newLine();
             bw.write(message);
+            bw.close();
+            fw.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
